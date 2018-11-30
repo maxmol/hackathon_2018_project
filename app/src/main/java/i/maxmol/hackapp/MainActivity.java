@@ -30,16 +30,5 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         context = this;
-
-        try {
-            File file = new File(context.getFilesDir() + "/db.txt");
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNext()) {
-                scanner.next(); // data line
-            }
-            scanner.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

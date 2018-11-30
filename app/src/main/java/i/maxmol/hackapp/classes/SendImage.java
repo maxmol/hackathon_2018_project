@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Scanner;
 
 import i.maxmol.hackapp.MainActivity;
 
@@ -105,6 +106,19 @@ public class SendImage extends AsyncTask<Void, Void, Void> {
             return response.toString();
         } else {
             throw new Exception("Non ok response returned");
+        }
+    }
+
+    public static void getData() {
+        try {
+            File file = new File(MainActivity.context.getFilesDir() + "/db.txt");
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                scanner.next(); // data line
+            }
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
