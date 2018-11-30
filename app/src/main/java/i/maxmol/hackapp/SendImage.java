@@ -39,6 +39,7 @@ public class SendImage {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.i("File send", "image uploaded");
+                MainActivity.context.progressBar.setMessage("Processing...");
 
                 RequestParams params = new RequestParams();
                 try {
@@ -51,10 +52,13 @@ public class SendImage {
                     e.printStackTrace();
                 }
 
+                Log.i("File send", "answer requested");
                 client.get(MainActivity.context, "https://www.betafaceapi.com/api/v2/media/hash", params, new AsyncHttpResponseHandler() {
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        Log.i("File send", "successful return");
+                        MainActivity.context.progressBar.dismiss();
                         String json = new String(responseBody);
 
                         try {
