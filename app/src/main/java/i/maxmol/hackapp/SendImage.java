@@ -1,5 +1,6 @@
 package i.maxmol.hackapp;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.File;
@@ -59,6 +60,9 @@ public class SendImage {
                         try {
                             JSONObject jsonObj = new JSONObject(json);
                             Log.d("debug", "JSON res: " + jsonObj);
+
+                            Intent intent = new Intent(MainActivity.context, Countries.class);
+                            MainActivity.context.startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
