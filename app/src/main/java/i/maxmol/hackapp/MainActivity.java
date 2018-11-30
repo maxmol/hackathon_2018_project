@@ -70,8 +70,7 @@ public class MainActivity extends Activity {
             photoResult.saveToFile(file).whenDone(new WhenDoneListener<Unit>() {
                 @Override
                 public void whenDone(@Nullable Unit unit) {
-                    SendImage si = new SendImage();
-                    si.execute();
+                    SendImage.upload(file);
                 }
             });
         } catch (Exception e) {

@@ -1,111 +1,37 @@
 package i.maxmol.hackapp.classes;
 
-import android.app.ProgressDialog;
-import android.graphics.Color;
-import android.os.AsyncTask;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import cz.msebera.android.httpclient.Header;
 import i.maxmol.hackapp.MainActivity;
+import com.loopj.android.http.*;
 
-public class SendImage extends AsyncTask<Void, Void, Void> {
-    ProgressDialog progress;
-    String response;
-    String UPLOAD_SERVER = "http://lampserv.org/hack2018/";
+public class SendImage {
+    private static String url = "https://lampserv.org/hack2018/index.php";
 
-    @Override
-    protected void onPreExecute() {
-        progress = new ProgressDialog(MainActivity.context);
-        progress.setTitle("Uploading....");
-        progress.setMessage("Please wait until the process is finished");
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-        progress.show();
-    }
-
-    @Override
-    protected Void doInBackground(Void... params) {
+    public static void upload(File file) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
         try {
-            response = POST_Data(MainActivity.context.getFilesDir() + "/img.png");
-            progress.dismiss();
-        } catch (Exception e) {
-            response = "Image was not uploaded!";
-            progress.dismiss();
+            params.put("img_upload", file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void result) {
-        if(response.contains("success"))
-        {
-            //success
-        }
-    }
-
-    public String POST_Data(String filepath) throws Exception {
-        HttpURLConnection connection = null;
-        DataOutputStream outputStream = null;
-        InputStream inputStream = null;
-        String boundary =  "*****"+Long.toString(System.currentTimeMillis())+"*****";
-        int bytesRead, bytesAvailable, bufferSize;
-        byte[] buffer;
-        String[] q = filepath.split("/");
-        int idx = q.length - 1;
-        File file = new File(filepath);
-        FileInputStream fileInputStream = new FileInputStream(file);
-        URL url = new URL(UPLOAD_SERVER);
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
-        connection.setUseCaches(false);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Connection", "Keep-Alive");
-        connection.setRequestProperty("User-Agent", "Android Multipart HTTP Client 1.0");
-        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary="+boundary);
-        outputStream = new DataOutputStream(connection.getOutputStream());
-        outputStream.writeBytes("--" + boundary + "\r\n");
-        outputStream.writeBytes("Content-Disposition: form-data; name=\"" + "img_upload" + "\"; filename=\"" + q[idx] +"\"" + "\r\n");
-        outputStream.writeBytes("Content-Type: image/jpeg" + "\r\n");
-        outputStream.writeBytes("Content-Transfer-Encoding: binary" + "\r\n");
-        outputStream.writeBytes("\r\n");
-        bytesAvailable = fileInputStream.available();
-        bufferSize = Math.min(bytesAvailable, 1048576);
-        buffer = new byte[bufferSize];
-        bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-        while(bytesRead > 0) {
-            outputStream.write(buffer, 0, bufferSize);
-            bytesAvailable = fileInputStream.available();
-            bufferSize = Math.min(bytesAvailable, 1048576);
-            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-        }
-        outputStream.writeBytes("\r\n");
-        outputStream.writeBytes("--" + boundary + "--" + "\r\n");
-        inputStream = connection.getInputStream();
-        int status = connection.getResponseCode();
-        if (status == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+        //TODO: Reaming body with id "property". prepareJson converts property class to Json string. Replace this with with your own method
+        //params.put("property",prepareJson(property));
+        client.post(MainActivity.context, url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                System.out.println("success");
             }
-            inputStream.close();
-            connection.disconnect();
-            fileInputStream.close();
-            outputStream.flush();
-            outputStream.close();
-            return response.toString();
-        } else {
-            throw new Exception("Non ok response returned");
-        }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                System.out.println("fail" + statusCode);
+            }
+        });
     }
 
     public static void getData() {
