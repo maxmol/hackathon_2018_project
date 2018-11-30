@@ -6,8 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.pm.ActivityInfo;
 import android.graphics.Camera;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -55,28 +57,35 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         context = this;
+
+        Button shootBut = findViewById(R.id.shoot_button);
+
         CameraView cameraView = findViewById(R.id.camera_view);
-        Fotoapparat fotoapparat = Fotoapparat
+        final Fotoapparat fotoapparat = Fotoapparat
                 .with(context)
                 .into(cameraView)
                 .lensPosition(front())
                 .build();
         fotoapparat.start();
-        fotoapparat.takePicture();
-        PhotoResult photoResult = fotoapparat.takePicture();   // Asynchronously saves photo to file
-
-        try {
-            final File file = new File(context.getFilesDir() + "/img.jpg");
-            photoResult.saveToFile(file).whenDone(new WhenDoneListener<Unit>() {
-                @Override
-                public void whenDone(@Nullable Unit unit) {
-                    SendImage si = new SendImage();
-                    si.execute();
+        shootBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    final PhotoResult photoResult = fotoapparat.takePicture();   // Asynchronously saves photo to file
+                    final File file = new File(context.getFilesDir() + "/img.jpg");
+                    photoResult.saveToFile(file).whenDone(new WhenDoneListener<Unit>() {
+                        @Override
+                        public void whenDone(@Nullable Unit unit) {
+                            SendImage si = new SendImage();
+                            si.execute();
+                            Log.i("Shoot","ok");
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
         
         try {
             File file = new File(context.getFilesDir() + "/db.txt");
