@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Take a shoot"/>
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="Take a shot"/>
 
 </RelativeLayout>

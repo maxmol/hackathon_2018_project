@@ -1,30 +1,74 @@
 package i.maxmol.hackapp;
 
+import android.util.Log;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpResponse;
 import i.maxmol.hackapp.MainActivity;
 import com.loopj.android.http.*;
 
-public class SendImage {
-    private static String url = "https://lampserv.org/hack2018/index.php";
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    public static void upload(File file) {
-        AsyncHttpClient client = new AsyncHttpClient();
+public class SendImage {
+    public static void upload(final File file) {
+        final AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         try {
-            params.put("img_upload", file);
-        } catch (FileNotFoundException e) {
+            params.put("api_key", "d45fd466-51e2-4701-8da8-04351c872236");
+            params.put("file", file);
+            params.put("detection_flags", "bestface,classifiers");
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //TODO: Reaming body with id "property". prepareJson converts property class to Json string. Replace this with with your own method
-        //params.put("property",prepareJson(property));
-        client.post(MainActivity.context, url, params, new AsyncHttpResponseHandler() {
+        //params.put("property", prepareJson(property));
+        client.post(MainActivity.context, "https://www.betafaceapi.com/api/v2/media/file", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                System.out.println("success");
+                Log.i("File send", "image uploaded");
+
+                RequestParams params = new RequestParams();
+                try {
+                    params.put("api_key", "d45fd466-51e2-4701-8da8-04351c872236");
+
+                    MessageDigest md = MessageDigest.getInstance("SHA-256");
+                    String hex = checksum(file.getAbsolutePath(), md);
+                    params.put("checksum", hex);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                client.get(MainActivity.context, "https://www.betafaceapi.com/api/v2/media/hash", params, new AsyncHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        String json = new String(responseBody);
+
+                        try {
+                            JSONObject jsonObj = new JSONObject(json);
+                            Log.d("debug", "JSON res: " + jsonObj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
             }
 
             @Override
@@ -32,6 +76,25 @@ public class SendImage {
                 System.out.println("fail" + statusCode);
             }
         });
+
+
+    }
+
+    private static String checksum(String filepath, MessageDigest md) throws IOException {
+
+        // file hashing with DigestInputStream
+        try (DigestInputStream dis = new DigestInputStream(new FileInputStream(filepath), md)) {
+            while (dis.read() != -1) ; //empty loop to clear the data
+            md = dis.getMessageDigest();
+        }
+
+        // bytes to hex
+        StringBuilder result = new StringBuilder();
+        for (byte b : md.digest()) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
+
     }
 
     public static void getData() {
