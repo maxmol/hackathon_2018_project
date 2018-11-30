@@ -28,7 +28,6 @@ public class SendImage extends AsyncTask<Void, Void, Void> {
         progress.setMessage("Please wait until the process is finished");
         progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
         progress.show();
-
     }
 
     @Override

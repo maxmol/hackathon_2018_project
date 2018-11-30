@@ -13,21 +13,28 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+
+import i.maxmol.hackapp.classes.SendImage;
 import io.fotoapparat.Fotoapparat;
 import io.fotoapparat.log.LoggersKt;
 import io.fotoapparat.parameter.ScaleType;
 import io.fotoapparat.preview.FrameProcessor;
 import io.fotoapparat.result.BitmapPhoto;
 import io.fotoapparat.result.PhotoResult;
+import io.fotoapparat.result.WhenDoneListener;
 import io.fotoapparat.selector.FlashSelectorsKt;
 import io.fotoapparat.selector.FocusModeSelectorsKt;
 import io.fotoapparat.selector.LensPositionSelectorsKt;
 import io.fotoapparat.selector.ResolutionSelectorsKt;
 import io.fotoapparat.selector.SelectorsKt;
 import io.fotoapparat.view.CameraView;
+import kotlin.Unit;
 
 import static io.fotoapparat.selector.LensPositionSelectorsKt.front;
 
@@ -57,10 +64,17 @@ public class MainActivity extends Activity {
         fotoapparat.start();
         fotoapparat.takePicture();
         PhotoResult photoResult = fotoapparat.takePicture();   // Asynchronously saves photo to file
+
         try {
-            File file = File.createTempFile("img","jpg",context.getFilesDir());
-            photoResult.saveToFile(file);
-        } catch (IOException e) {
+            final File file = new File(context.getFilesDir() + "/img.jpg");
+            photoResult.saveToFile(file).whenDone(new WhenDoneListener<Unit>() {
+                @Override
+                public void whenDone(@Nullable Unit unit) {
+                    SendImage si = new SendImage();
+                    si.execute();
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
