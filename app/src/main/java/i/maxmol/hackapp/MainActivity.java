@@ -60,12 +60,14 @@ public class MainActivity extends Activity {
 
         final Button shootBut = findViewById(R.id.shoot_button);
         shootBut.setAlpha(0f);
+        shootBut.setEnabled(false);
 
-        RotatingTextWrapper rotatingTextWrapper = (RotatingTextWrapper) findViewById(R.id.custom_switcher);
+        final RotatingTextWrapper rotatingTextWrapper = (RotatingTextWrapper) findViewById(R.id.custom_switcher);
         rotatingTextWrapper.setSize(55);
         rotatingTextWrapper.setTypeface(typeface2);
 
         final LinearLayout welcome = findViewById(R.id.welcomelayout);
+
         final Rotatable rotatable = new Rotatable(Color.parseColor("#FFA036"), 1000, "Explore", "Fun", "Enjoy", "Voyage", "Travel", "Enrich", "Relax", "Rest", "Holiday");
         rotatable.setSize(55);
         rotatable.setAnimationDuration(500);
@@ -77,6 +79,8 @@ public class MainActivity extends Activity {
         rotatingTextWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                rotatingTextWrapper.setOnClickListener(null);
+
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 TranslateAnimation animate = new TranslateAnimation(0,0,0,displayMetrics.heightPixels * 1.1f);
@@ -90,7 +94,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         ((RelativeLayout)welcome.getParent()).removeView(welcome);
-
+                        shootBut.setEnabled(true);
                         shootBut.animate()
                                 .alpha(1f)
                                 .setDuration(500)
