@@ -2,14 +2,20 @@ package i.maxmol.hackapp;
 
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.graphics.Camera;
 import android.os.Bundle;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import java.io.File;
 import java.util.Scanner;
 
 /**
- * The first activity created after we launch the application.
+ * MainActivity
  */
 public class MainActivity extends Activity {
 
@@ -35,7 +41,5 @@ public class MainActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 }
