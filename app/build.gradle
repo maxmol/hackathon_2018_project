@@ -31,4 +31,5 @@ dependencies {
     implementation 'com.nightonke:wowoviewpager:2.0.0'
     implementation 'io.fotoapparat:fotoapparat:2.6.1'
     implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.ramotion.expandingcollection:expanding-collection:0.9.0'
 }
