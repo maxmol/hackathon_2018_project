@@ -32,4 +32,5 @@ dependencies {
     implementation 'io.fotoapparat:fotoapparat:2.6.1'
     implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation 'com.sdsmdg.harjot:rotatingtext:1.0.2'
+    implementation 'com.ramotion.expandingcollection:expanding-collection:0.9.0'
 }
