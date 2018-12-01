@@ -1,5 +1,7 @@
 package i.maxmol.hackapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 
@@ -12,6 +14,7 @@ import java.net.URI;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import cz.msebera.android.httpclient.Header;
@@ -39,6 +42,7 @@ public class SendImage {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.i("File send", "image uploaded");
+                MainActivity.context.progressBar.setMessage("Processing...");
 
                 RequestParams params = new RequestParams();
                 try {
@@ -51,15 +55,34 @@ public class SendImage {
                     e.printStackTrace();
                 }
 
+                Log.i("File send", "answer requested");
                 client.get(MainActivity.context, "https://www.betafaceapi.com/api/v2/media/hash", params, new AsyncHttpResponseHandler() {
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        Log.i("File send", "successful return");
+                        MainActivity.context.progressBar.dismiss();
                         String json = new String(responseBody);
 
                         try {
                             JSONObject jsonObj = new JSONObject(json);
-                            Log.d("debug", "JSON res: " + jsonObj);
+                            ArrayList<CountryInfo> ci = Countries.calc(jsonObj);
+                            if (ci == null) {
+                                new AlertDialog.Builder(MainActivity.context)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setTitle("Try again!")
+                                        .setMessage("We can't see you on the photo.")
+                                        .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                MainActivity.context.onResume();
+                                            }
+
+                                        })
+                                        .show();
+                                return;
+                            }
+                            JsonParser.setCountryInfos(ci);
 
                             Intent intent = new Intent(MainActivity.context, Countries.class);
                             MainActivity.context.startActivity(intent);
@@ -99,18 +122,5 @@ public class SendImage {
         }
         return result.toString();
 
-    }
-
-    public static void getData() {
-        try {
-            File file = new File(MainActivity.context.getFilesDir() + "/db.txt");
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNext()) {
-                scanner.next(); // data line
-            }
-            scanner.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
