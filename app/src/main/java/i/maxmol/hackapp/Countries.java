@@ -142,13 +142,13 @@ public class Countries extends Activity {
                 if (count > 2) {
                     return s;
                 }
-
-                return null;
             }
             scanner.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
 }
