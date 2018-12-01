@@ -1,5 +1,19 @@
 package i.maxmol.hackapp;
 
+import android.content.res.Resources;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.ramotion.expandingcollection.ECCardData;
+import com.ramotion.expandingcollection.ECPagerViewAdapter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -18,7 +32,11 @@ import com.ramotion.expandingcollection.ECCardData;
 import com.ramotion.expandingcollection.ECPagerView;
 import com.ramotion.expandingcollection.ECPagerViewAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
+import java.util.Scanner;
 
 import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 
@@ -87,6 +105,58 @@ public class Countries extends Activity {
     public void onBackPressed() {
         if (!ecPagerView.collapse())
             super.onBackPressed();
+    }
+
+    public static ArrayList<CountryInfo> calc(JSONObject jsonObj) {
+        ArrayList<CountryInfo> list = new ArrayList<>();
+        try {
+            File file = new File("file://android_raw/face_travel.txt");
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                String[] s = scanner.next().split(";");
+
+                int count = 0;
+                if (s.length > 4) {
+                    JSONArray tags = jsonObj.getJSONArray("faces").getJSONObject(0).getJSONArray("tags");
+                    for (int i = 0; i < tags.length(); i++) {
+                        JSONObject jsonObject = tags.getJSONObject(i);
+                        String name = jsonObject.getString("name");
+                        String value = jsonObject.getString("value");
+                        boolean b1 = value != "no";
+
+                        if (name == "young") {
+                            if (b1 == (s[0] != "0")) {
+                                count++;
+                            }
+                        }
+                        else if (name == "beard") {
+                            if (b1 == (s[0] != "0")) {
+                                count++;
+                            }
+                        }
+                        else if (name == "glasses") {
+                            if (b1 == (s[0] != "0")) {
+                                count++;
+                            }
+                        }
+                    }
+                }
+
+                if (count > 3) {
+                    list.add(new CountryInfo(
+                            R.drawable.city_scape,
+                            MainActivity.context.getResources().getIdentifier(s[3].toLowerCase().replaceAll(" ", "_"), "raw", MainActivity.context.getPackageName()),
+                            s[3],
+                            s[4]
+                    ));
+                }
+            }
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
 }
