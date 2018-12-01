@@ -10,7 +10,10 @@ import android.widget.ListView;
 import com.ramotion.expandingcollection.ECCardData;
 import com.ramotion.expandingcollection.ECPagerViewAdapter;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,10 +113,18 @@ public class Countries extends Activity {
     public static ArrayList<CountryInfo> calc(JSONObject jsonObj) {
         ArrayList<CountryInfo> list = new ArrayList<>();
         try {
-            File file = new File("file://android_raw/face_travel.txt");
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNext()) {
-                String[] s = scanner.next().split(";");
+            Resources res = MainActivity.context.getResources();
+            InputStream in_s = res.openRawResource(R.raw.face_travel);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in_s));
+
+            String line;
+            while (true) {
+                line = reader.readLine();
+
+                if (line == null) break;
+
+                String[] s = line.split(";");
 
                 int count = 0;
                 if (s.length > 4) {
@@ -124,7 +135,9 @@ public class Countries extends Activity {
                         String value = jsonObject.getString("value");
                         boolean b1 = value != "no";
 
+                        System.out.println(name);
                         if (name == "young") {
+                            System.out.println(s[0] != "0");
                             if (b1 == (s[0] != "0")) {
                                 count++;
                             }
@@ -151,7 +164,8 @@ public class Countries extends Activity {
                     ));
                 }
             }
-            scanner.close();
+
+            reader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
