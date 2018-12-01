@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.ramotion.expandingcollection.ECCardData;
 import com.ramotion.expandingcollection.ECPagerViewAdapter;
 
+import java.io.File;
 import java.util.List;
 
 import android.app.Activity;
@@ -28,7 +29,11 @@ import com.ramotion.expandingcollection.ECPagerCardContentList;
 import com.ramotion.expandingcollection.ECPagerView;
 import com.ramotion.expandingcollection.ECPagerViewAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
+import java.util.Scanner;
 
 import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 
@@ -91,6 +96,52 @@ public class Countries extends Activity {
     public void onBackPressed() {
         if (!ecPagerView.collapse())
             super.onBackPressed();
+    }
+
+    public static String[] calc(JSONObject jsonObj) {
+        try {
+            File file = new File("file://android_raw/FaceTravel.txt");
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                String[] s = scanner.next().split(";");
+
+                int count = 0;
+                if (s.length > 4) {
+                    JSONArray tags = jsonObj.getJSONArray("faces").getJSONObject(0).getJSONArray("tags");
+                    for (int i = 0; i < tags.length(); i++) {
+                        JSONObject jsonObject = tags.getJSONObject(i);
+                        String name = jsonObject.getString("name");
+                        String value = jsonObject.getString("value");
+                        boolean b1 = value != "no";
+
+                        if (name == "young") {
+                            if (b1 == (s[0] != "0")) {
+                                count++;
+                            }
+                        }
+                        else if (name == "beard") {
+                            if (b1 == (s[0] != "0")) {
+                                count++;
+                            }
+                        }
+                        else if (name == "glasses") {
+                            if (b1 == (s[0] != "0")) {
+                                count++;
+                            }
+                        }
+                    }
+                }
+
+                if (count > 2) {
+                    return s;
+                }
+
+                return null;
+            }
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

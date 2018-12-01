@@ -44,6 +44,7 @@ public class MainActivity extends Activity {
     public static MainActivity context;
     public ProgressDialog progressBar;
     public Fotoapparat fotoapparat;
+    private Button shootBut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class MainActivity extends Activity {
         Typeface typeface = ResourcesCompat.getFont(this, R.font.raleway_semibold);
         Typeface typeface2 = ResourcesCompat.getFont(this, R.font.reckoner_bold);
 
-        final Button shootBut = findViewById(R.id.shoot_button);
+        shootBut = findViewById(R.id.shoot_button);
         shootBut.setAlpha(0f);
         shootBut.setEnabled(false);
 
@@ -118,9 +119,27 @@ public class MainActivity extends Activity {
                 .lensPosition(front())
                 .build();
         fotoapparat.start();
+        
+        try {
+            File file = new File(context.getFilesDir() + "/db.txt");
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                scanner.next(); // data line
+            }
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        fotoapparat.start();
+
         shootBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                shootBut.setOnClickListener(null);
                 progressBar = new ProgressDialog(MainActivity.context);
                 progressBar.setCancelable(false);
                 progressBar.setMessage("Saving Image...");
@@ -144,22 +163,6 @@ public class MainActivity extends Activity {
                 }
             }
         });
-        
-        try {
-            File file = new File(context.getFilesDir() + "/db.txt");
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNext()) {
-                scanner.next(); // data line
-            }
-            scanner.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        fotoapparat.start();
         super.onResume();
     }
 
