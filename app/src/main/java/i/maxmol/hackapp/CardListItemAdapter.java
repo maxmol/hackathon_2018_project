@@ -3,9 +3,11 @@ package i.maxmol.hackapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +45,13 @@ public class CardListItemAdapter extends ECCardContentListItemAdapter<String> {
         final String item = getItem(position);
         if (item != null) {
             viewHolder.itemText.setText(item);
+            viewHolder.itemText.setBackgroundColor(Color.parseColor("#00000000"));
         }
+
+
+        Typeface typeface = ResourcesCompat.getFont(Countries.context, R.font.raleway_semibold);
+        viewHolder.itemText.setBackgroundColor(Color.parseColor("#00000000"));
+        viewHolder.itemText.setTypeface(typeface);
         // Example of changing/removing card list items
         /*viewHolder.itemText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +68,7 @@ public class CardListItemAdapter extends ECCardContentListItemAdapter<String> {
                 }
             }
         });*/
+        rowView.setBackgroundColor(Color.parseColor("#00000000"));
         return rowView;
     }
 
