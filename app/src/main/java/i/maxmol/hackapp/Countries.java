@@ -52,7 +52,7 @@ public class Countries extends Activity {
                 final CardListItemAdapter listItemAdapter = new CardListItemAdapter(getApplicationContext(), listItems);
                 list.setAdapter(listItemAdapter);
                 // Also some visual tuning can be done here
-                list.setBackgroundColor(Color.WHITE);
+                list.setBackgroundColor(Color.parseColor("#3BB273"));
 
                 // Here we can create elements for head view or inflate layout from xml using inflater service
                 TextView cardTitle = new TextView(getApplicationContext());

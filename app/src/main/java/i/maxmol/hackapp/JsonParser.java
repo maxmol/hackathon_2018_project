@@ -6,10 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonParser {
+
+    private static List<CountryInfo> countryInfos = new ArrayList<CountryInfo>();
+
+    public static void setCountryInfos(List<CountryInfo> countryInfos) {
+        JsonParser.countryInfos = countryInfos;
+    }
+
     static public List<ECCardData> getData(){
         List<ECCardData> cards = new ArrayList<>();
-        List<CountryInfo> countryInfos = new ArrayList<CountryInfo>();
-        countryInfos.add(new CountryInfo(R.drawable.city_scape,R.drawable.city_scape_head,"city_scape","some cool text"));
         for     (CountryInfo el: countryInfos) {
             List<String> tmp = new ArrayList<>();
             tmp.add(el.cardText);

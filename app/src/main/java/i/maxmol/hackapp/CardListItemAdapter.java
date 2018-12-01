@@ -32,9 +32,9 @@ public class CardListItemAdapter extends ECCardContentListItemAdapter<String> {
         if (rowView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             rowView = inflater.inflate(R.layout.list_element, null);
+            rowView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             viewHolder = new ViewHolder();
             viewHolder.itemText = (TextView) rowView.findViewById(R.id.list_item_text);
-            viewHolder.itemText.setTextColor(Color.parseColor("#C03221"));
             rowView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) rowView.getTag();
