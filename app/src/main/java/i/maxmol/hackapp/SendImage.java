@@ -64,7 +64,6 @@ public class SendImage {
 
                         try {
                             JSONObject jsonObj = new JSONObject(json);
-
                             JsonParser.setCountryInfos(Countries.calc(jsonObj));
 
                             Intent intent = new Intent(MainActivity.context, Countries.class);

@@ -3,6 +3,7 @@ package i.maxmol.hackapp;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -133,29 +134,28 @@ public class Countries extends Activity {
                         JSONObject jsonObject = tags.getJSONObject(i);
                         String name = jsonObject.getString("name");
                         String value = jsonObject.getString("value");
-                        boolean b1 = value != "no";
+                        boolean b1 = !value.equals("no");
 
-                        System.out.println(name);
-                        if (name == "young") {
-                            System.out.println(s[0] != "0");
-                            if (b1 == (s[0] != "0")) {
+                        //Log.i("face info", name + ": " + value + ", " + b1);
+                        if (name.equals("young")) {
+                            if (b1 == (s[0].equals("0"))) {
                                 count++;
                             }
                         }
-                        else if (name == "beard") {
-                            if (b1 == (s[0] != "0")) {
+                        else if (name.equals("beard")) {
+                            if (b1 == (s[1].equals("0"))) {
                                 count++;
                             }
                         }
-                        else if (name == "glasses") {
-                            if (b1 == (s[0] != "0")) {
+                        else if (name.equals("glasses")) {
+                            if (b1 == (s[2].equals("0"))) {
                                 count++;
                             }
                         }
                     }
                 }
 
-                if (count > 3) {
+                if (count > 2) {
                     list.add(new CountryInfo(
                             R.drawable.city_scape,
                             MainActivity.context.getResources().getIdentifier(s[3].toLowerCase().replaceAll(" ", "_"), "raw", MainActivity.context.getPackageName()),
