@@ -84,7 +84,7 @@ public class Countries extends Activity {
                 TextView cardTitle = new TextView(getApplicationContext());
                 cardTitle.setText(cardData.getCardTitle());
                 cardTitle.setTextColor(Color.parseColor("#F7F7FF"));
-                cardTitle.setTextSize(COMPLEX_UNIT_DIP, 50);
+                cardTitle.setTextSize(COMPLEX_UNIT_DIP, 42);
                 cardTitle.setTypeface(typeface);
                 cardTitle.setShadowLayer(4, 0, 0, Color.BLACK);
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
