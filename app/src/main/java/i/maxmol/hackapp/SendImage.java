@@ -12,6 +12,7 @@ import java.net.URI;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import cz.msebera.android.httpclient.Header;
@@ -64,7 +65,8 @@ public class SendImage {
                         try {
                             JSONObject jsonObj = new JSONObject(json);
 
-                            Countries.calc(jsonObj);
+                            JsonParser.setCountryInfos(Countries.calc(jsonObj));
+
                             Intent intent = new Intent(MainActivity.context, Countries.class);
                             MainActivity.context.startActivity(intent);
                         } catch (JSONException e) {

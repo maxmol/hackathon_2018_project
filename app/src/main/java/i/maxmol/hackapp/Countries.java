@@ -1,5 +1,6 @@
 package i.maxmol.hackapp;
 
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import com.ramotion.expandingcollection.ECCardData;
 import com.ramotion.expandingcollection.ECPagerViewAdapter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -105,9 +107,10 @@ public class Countries extends Activity {
             super.onBackPressed();
     }
 
-    public static String[] calc(JSONObject jsonObj) {
+    public static ArrayList<CountryInfo> calc(JSONObject jsonObj) {
+        ArrayList<CountryInfo> list = new ArrayList<>();
         try {
-            File file = new File("file://android_raw/FaceTravel.txt");
+            File file = new File("file://android_raw/face_travel.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNext()) {
                 String[] s = scanner.next().split(";");
@@ -139,8 +142,13 @@ public class Countries extends Activity {
                     }
                 }
 
-                if (count > 2) {
-                    return s;
+                if (count > 3) {
+                    list.add(new CountryInfo(
+                            R.drawable.city_scape,
+                            MainActivity.context.getResources().getIdentifier(s[3].toLowerCase().replaceAll(" ", "_"), "raw", MainActivity.context.getPackageName()),
+                            s[3],
+                            s[4]
+                    ));
                 }
             }
             scanner.close();
@@ -148,7 +156,7 @@ public class Countries extends Activity {
             e.printStackTrace();
         }
 
-        return null;
+        return list;
     }
 
 }
