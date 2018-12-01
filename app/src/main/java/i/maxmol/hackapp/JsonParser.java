@@ -15,12 +15,6 @@ public class JsonParser {
 
     static public List<ECCardData> getData(){
         List<ECCardData> cards = new ArrayList<>();
-        // for test
-        CountryInfo countryInfo = new CountryInfo(R.drawable.city_scape,R.drawable.city_scape_head,"Vienne","big big big big big big big big big big big big big big big big big big big big big big text");
-        CountryInfo countryInfo1 = new CountryInfo(R.drawable.city_scape,R.drawable.city_scape_head,"London","big big big big big big big big big big big big big big big big big big big big big big text");
-        countryInfos.add(countryInfo);
-        countryInfos.add(countryInfo1);
-        // for test
         for     (CountryInfo el: countryInfos) {
             List<String> tmp = new ArrayList<>();
             tmp.add(el.cardText);
