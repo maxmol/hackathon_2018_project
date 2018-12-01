@@ -157,7 +157,7 @@ public class Countries extends Activity {
 
                 if (count > 2) {
                     list.add(new CountryInfo(
-                            R.drawable.city_scape,
+                            MainActivity.context.getResources().getIdentifier(s[3].toLowerCase().replaceAll(" ", "_")+"2", "raw", MainActivity.context.getPackageName()),
                             MainActivity.context.getResources().getIdentifier(s[3].toLowerCase().replaceAll(" ", "_"), "raw", MainActivity.context.getPackageName()),
                             s[3],
                             s[4]
