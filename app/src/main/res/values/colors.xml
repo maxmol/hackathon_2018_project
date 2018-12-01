@@ -3,11 +3,8 @@
     <color name="colorPrimary">#3BB273</color>
     <color name="colorPrimaryDark">#C03221</color>
     <color name="colorAccent">#35A7FF</color>
+    
     <color name="transparent">#00ffffff</color>
-
-    <color name="colorPrimary">#2e2e2e</color>
-    <color name="colorPrimaryDark">#1d1d1d</color>
-    <color name="colorAccent">#797979</color>
 
     <color name="bgGradientStart">#000000</color>
     <color name="bgGradientEnd">#d8000000</color>
