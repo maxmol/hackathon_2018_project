@@ -1,19 +1,10 @@
 package i.maxmol.hackapp;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.widget.ListView;
-
-import com.ramotion.expandingcollection.ECCardData;
-import com.ramotion.expandingcollection.ECPagerViewAdapter;
-
-import java.util.List;
-
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +15,6 @@ import android.widget.TextView;
 
 import com.ramotion.expandingcollection.ECBackgroundSwitcherView;
 import com.ramotion.expandingcollection.ECCardData;
-import com.ramotion.expandingcollection.ECPagerCardContentList;
 import com.ramotion.expandingcollection.ECPagerView;
 import com.ramotion.expandingcollection.ECPagerViewAdapter;
 
@@ -35,11 +25,13 @@ import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 public class Countries extends Activity {
 
     private ECPagerView ecPagerView;
+    public static Countries context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_countries);
+        context = this;
 
         // Get pager from layout
         ecPagerView = (ECPagerView) findViewById(R.id.ec_pager_element);
@@ -54,6 +46,7 @@ public class Countries extends Activity {
                 // Data object for current card
                 CardDataImpl cardData = (CardDataImpl) data;
 
+                Typeface typeface = ResourcesCompat.getFont(context, R.font.raleway_semibold);
                 // Set adapter and items to current card content list
                 final List<String> listItems = cardData.getListItems();
                 final CardListItemAdapter listItemAdapter = new CardListItemAdapter(getApplicationContext(), listItems);
@@ -64,7 +57,10 @@ public class Countries extends Activity {
                 // Here we can create elements for head view or inflate layout from xml using inflater service
                 TextView cardTitle = new TextView(getApplicationContext());
                 cardTitle.setText(cardData.getCardTitle());
-                cardTitle.setTextSize(COMPLEX_UNIT_DIP, 20);
+                cardTitle.setTextColor(Color.parseColor("#F7F7FF"));
+                cardTitle.setTextSize(COMPLEX_UNIT_DIP, 50);
+                cardTitle.setTypeface(typeface);
+                cardTitle.setShadowLayer(4, 0, 0, Color.BLACK);
                 FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.gravity = Gravity.CENTER;
                 head.addView(cardTitle, layoutParams);

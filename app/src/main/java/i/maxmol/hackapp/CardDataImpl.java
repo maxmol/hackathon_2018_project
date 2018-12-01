@@ -47,13 +47,7 @@ public class CardDataImpl implements ECCardData<String> {
     private static List<String> createItemsList(String cardName) {
         ArrayList<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(
-                cardName + " - Item 1",
-                cardName + " - Item 2",
-                cardName + " - Item 3",
-                cardName + " - Item 4",
-                cardName + " - Item 5",
-                cardName + " - Item 6",
-                cardName + " - Item 7"
+                cardName + " - Item 1"
         ));
         return list;
     }
