@@ -1,5 +1,7 @@
 package i.maxmol.hackapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 
@@ -64,7 +66,23 @@ public class SendImage {
 
                         try {
                             JSONObject jsonObj = new JSONObject(json);
-                            JsonParser.setCountryInfos(Countries.calc(jsonObj));
+                            ArrayList<CountryInfo> ci = Countries.calc(jsonObj);
+                            if (ci == null) {
+                                new AlertDialog.Builder(MainActivity.context)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setTitle("Try again!")
+                                        .setMessage("We can't see you on the photo.")
+                                        .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                MainActivity.context.onResume();
+                                            }
+
+                                        })
+                                        .show();
+                                return;
+                            }
+                            JsonParser.setCountryInfos(ci);
 
                             Intent intent = new Intent(MainActivity.context, Countries.class);
                             MainActivity.context.startActivity(intent);

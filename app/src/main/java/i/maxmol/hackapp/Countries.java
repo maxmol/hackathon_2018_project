@@ -129,7 +129,9 @@ public class Countries extends Activity {
 
                 int count = 0;
                 if (s.length > 4) {
-                    JSONArray tags = jsonObj.getJSONArray("faces").getJSONObject(0).getJSONArray("tags");
+                    JSONArray faces = jsonObj.getJSONArray("faces");
+
+                    JSONArray tags = faces.getJSONObject(0).getJSONArray("tags");
                     for (int i = 0; i < tags.length(); i++) {
                         JSONObject jsonObject = tags.getJSONObject(i);
                         String name = jsonObject.getString("name");
@@ -168,6 +170,7 @@ public class Countries extends Activity {
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
 
         return list;
