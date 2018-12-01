@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ListView;
 
 import com.ramotion.expandingcollection.ECCardData;
@@ -54,6 +55,9 @@ public class Countries extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_countries);
         context = this;
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // Get pager from layout
         ecPagerView = (ECPagerView) findViewById(R.id.ec_pager_element);
