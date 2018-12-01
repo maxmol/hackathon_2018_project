@@ -14,6 +14,7 @@ public class JsonParser {
             List<String> tmp = new ArrayList<>();
             tmp.add(el.cardText);
             cards.add(new CardDataImpl(el.cardTitle, el.mainBackgroundResource,el.headBackgroundResource,tmp));
+            cards.add(new CardDataImpl(el.cardTitle, el.mainBackgroundResource,el.headBackgroundResource,tmp));
         }
         return cards;
     }
